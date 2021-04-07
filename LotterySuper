@@ -1,0 +1,53 @@
+/*
+super class for different kinds of lottery
+note: ArrayList<picks> will be used by powerball and
+ megamilloins to store white/primary numbers of those tickets
+ */
+
+import java.util.ArrayList;
+
+public class LotterySuper {
+    private static int ticketsSold = 0; //total of all lottery tickets
+    private String name; //which type
+    private ArrayList<Integer> picks;
+    private int numVals;
+    private int maxVal;
+
+    //quickpick ticket
+    //write valideate, rest of this class
+
+    public Lotteryticket(String name, int numVals, int maxVal) {
+        this.name = name;
+        this.numVals = numVals;
+        this.maxVal = maxVal;
+        if (numVals > maxVal) {
+            throw new IllegalStateException("bruh, try again");
+        }
+        picks = new ArrayList<Integer>();
+        for (int i = 0; i < maxVal; i++) {
+            picks.add(pickUniqueVal());
+        }
+
+        if (!validate()) {
+            throw new IllegalStateException("ticket invalid");
+        }
+
+
+    }
+
+    public boolean validate() {
+
+
+        return true;
+    }
+
+    private int pickUniqueVal() {
+        int r = (int) ((Math.random() * maxVal)) + 1;
+        while (picks.contains(r)) {
+            r = (int) ((Math.random() * maxVal)) + 1;
+        }
+        return r;
+    }
+
+
+}
