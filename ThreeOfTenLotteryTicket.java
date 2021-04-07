@@ -11,8 +11,7 @@ public class ThreeOfTenLotteryTicket {
      * the three integers assigned to picks are determined by calls to pickUniqueVal(), and the ticket is then validated
      */
     public ThreeOfTenLotteryTicket() { // a Quick Pick ticket
-        ticketsSold++;
-        ticketNumber = ticketsSold;
+       
         picks = new ArrayList<Integer>();
         for (int i = 0; i < 3; i++) {
             picks.add(pickUniqueVal());
@@ -21,6 +20,8 @@ public class ThreeOfTenLotteryTicket {
         if (!validate()) {
             throw new IllegalStateException("ticket invalid");
         }
+        ticketsSold++;
+        ticketNumber = ticketsSold;
     }
 
     /**
@@ -31,8 +32,7 @@ public class ThreeOfTenLotteryTicket {
      *                the ticket is validated after picks has been filled.
      */
     public ThreeOfTenLotteryTicket(int[] choices) { // user's choice lotter ticket
-        ticketsSold++;
-        ticketNumber = ticketsSold;
+
         picks = new ArrayList<Integer>();
         for (int i = 0; i < choices.length; i++) {
             {
@@ -42,7 +42,8 @@ public class ThreeOfTenLotteryTicket {
         if (!validate()) {
             throw new IllegalStateException("ticket invalid");
         }
-
+        ticketsSold++;
+        ticketNumber = ticketsSold;
     }
 
     /**
