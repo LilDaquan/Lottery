@@ -16,38 +16,103 @@ public class LotterySuper {
     //quickpick ticket
     //write valideate, rest of this class
 
-    public Lotteryticket(String name, int numVals, int maxVal) {
+    public LotterySuper(String name, int numVals, int maxVal) {
         this.name = name;
         this.numVals = numVals;
         this.maxVal = maxVal;
         if (numVals > maxVal) {
-            throw new IllegalStateException("bruh, try again");
+            throw new IllegalStateException("bruh, numVals > maxVal");
         }
         picks = new ArrayList<Integer>();
-        for (int i = 0; i < maxVal; i++) {
+        for (int i = 0; i < numVals; i++) {
             picks.add(pickUniqueVal());
         }
-
         if (!validate()) {
             throw new IllegalStateException("ticket invalid");
         }
+    }
 
-
+    public String toString() {
+        return numVals + " of " + maxVal + " lottery ticket #" + ticketsSold + ", picks: " + picks.toString();
     }
 
     public boolean validate() {
-
-
+        if (picks.size() != numVals)
+            return false;
+        for (int i = picks.size() - 1; i >= 0; i--) {
+            if (i != picks.indexOf(picks.get(i))) {
+                return false;
+            }
+            if (picks.get(i) < 1 || picks.get(i) > maxVal) {
+                return false;
+            }
+        }
         return true;
     }
 
     private int pickUniqueVal() {
         int r = (int) ((Math.random() * maxVal)) + 1;
-        while (picks.contains(r)) {
+        while (inPicks(r)) {
             r = (int) ((Math.random() * maxVal)) + 1;
         }
         return r;
     }
 
+    public int getMaxVal() {
+        return maxVal;
+    }
+
+    public boolean grandPrizeWinner(LotterySuper winningTicket) {
+        if (this.picks.size() != winningTicket.picks.size())
+            throw new IllegalStateException("they dif sizes g");
+        if (this.getMaxVal() != winningTicket.getMaxVal()) {
+            throw new IllegalStateException("idk wut you doing, different ranges");
+
+        }
+
+        for (int val : winningTicket.picks) {
+            if (!this.picks.contains(val)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean inPicks(int num) {
+        if (picks.size() == 0) {
+            return false;
+        }
+        for (int n : picks) {
+            if (n == num) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public static void main(String[] args) {
+        LotterySuper myTicket = new LotterySuper("myTicket", 5, 69);
+        int sum = 0;
+        for (int i = 0; i < 50; i++) {
+            int gamesPlayed = 0;
+            boolean notRich = true;
+            while (notRich) {
+                LotterySuper winningTicket = new LotterySuper("winningTicket", 5, 69);
+                gamesPlayed++;
+                //System.out.println("my ticket is " + myTicket);
+                //BSystem.out.println("The winning ticket is " + winningTicket);
+                if (myTicket.grandPrizeWinner(winningTicket)) {
+                    System.out.println("\nI won after " + gamesPlayed + " games!!! I'm rich!!! WoooooooooHoooooooooo!!!!");
+                    notRich = false;
+                    sum += gamesPlayed;
+                } else {
+                    //System.out.println("Shucks......\n");
+                }
+            }
+        }
+        System.out.println("Average number of tickets: " + sum / 50);
+
+    }
 
 }
