@@ -1,0 +1,28 @@
+public class PowerballTicket extends LotteryTicket {
+    private int red;
+    private int powerballTicketsSold;
+
+    public PowerballTicket() {
+
+        super("Powerball", 5, 69);
+        this.red = (int) (Math.random() * 26) + 1;
+        if (!validate()) {
+            throw new IllegalStateException("ticket invalid");
+        }
+        powerballTicketsSold++;
+
+    }
+
+    public boolean validate() {
+       return red >= 1 && red <= 26;
+    }/ 
+
+    public static void main(String[] args) {
+        PowerballTicket p = new PowerballTicket();
+        System.out.println("Wassaup");
+
+
+    }
+
+
+}
