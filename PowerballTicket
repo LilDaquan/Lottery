@@ -1,28 +1,71 @@
 public class PowerballTicket extends LotteryTicket {
     private int red;
-    private int powerballTicketsSold;
+    private static int powerballTicketsSold;
+    private int ticketNum;
 
     public PowerballTicket() {
-
         super("Powerball", 5, 69);
-        this.red = (int) (Math.random() * 26) + 1;
-        if (!validate()) {
+        red = (int) (Math.random() * 26) + 1;
+        if (!validatePB()) {
             throw new IllegalStateException("ticket invalid");
         }
         powerballTicketsSold++;
+        ticketNum = powerballTicketsSold;
+    }
+
+    public PowerballTicket(int[] choices, int r) {
+        super("Powerball", 5, 69, choices);
+        this.red = r;
+        if (!validatePB()) {
+            throw new IllegalStateException("ticket invalid");
+        }
+        powerballTicketsSold++;
+        ticketNum = powerballTicketsSold;
 
     }
 
-    public boolean validate() {
-       return red >= 1 && red <= 26;
-    }/ 
+    public boolean validatePB() {
+        return red >= 1 && red <= 26;
+    }
+
+    public String toString() {
+        return "Powerball ticket (5 of 69 and 1 of 26)," +
+                " #" + ticketNum + ", picks: "
+                + super.toStringPicks() + " " + red;
+    }
+
+    public boolean PowerballWinner(PowerballTicket winningTicket) {
+        return super.grandPrizeWinner(winningTicket) && (winningTicket.red == this.red);
+    }
+
+    public static int playUnitWon(PowerballTicket mine) {
+        int gamesPlayed = 0;
+        boolean IAmABrokeHo = true;
+        while (IAmABrokeHo) {
+            PowerballTicket winner = new PowerballTicket();
+            gamesPlayed++;
+            if (gamesPlayed % 10000000 == 1) {
+                System.out.println("my ticket is " + mine);
+                System.out.println("The winning ticket is " + winner);
+                System.out.println();
+            }
+            if (mine.PowerballWinner(winner)) {
+                System.out.println("my ticket is " + mine);
+                System.out.println("The winning ticket is " + winner);
+                System.out.println("Slattt, you won after " + gamesPlayed + " games. ");
+                IAmABrokeHo = false;
+            }
+        }
+        return gamesPlayed;
+    }
 
     public static void main(String[] args) {
         PowerballTicket p = new PowerballTicket();
-        System.out.println("Wassaup");
-
+        int[] a = {6, 5, 40, 26, 31};
+        PowerballTicket p2 = new PowerballTicket(a, 23);
+        System.out.println(p.toString() + "\n" + p2.toString() + "\n");
+        int n = playUnitWon(p2);
 
     }
-
 
 }
